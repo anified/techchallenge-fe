@@ -13,6 +13,9 @@ export class AppComponent implements AfterViewInit {
   selectedAirportSIDTopWaypoints: any;
   selectedAirportSTARTopWaypoints: any;
 
+  sidPanelOpenState = true;
+  starPanelOpenState = true;
+
   constructor(private airportSerivce: AirportService) {
   }
 

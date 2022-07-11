@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     HttpClientModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatExpansionModule,
     FlexLayoutModule
   ],
   providers: [],

@@ -57,12 +57,42 @@ p {
 }
 
 .content {
-  display: flex;
+  // display: flex;
   margin: 82px auto 32px;
   padding: 0 16px;
   max-width: 960px;
-  flex-direction: column;
-  align-items: center;
+  // flex-direction: column;
+  // align-items: center;
+
+  .airport-detail {
+    padding-bottom: 8px;
+    .airport-label {
+      color: darkgray;
+      font-size: 12px;
+    }
+
+    .airport-value {
+      font-weight: 600;
+      font-size: 16px;
+    }
+  }
+
+  .waypoint-details {
+    padding: 10px;
+    .waypoint-label {
+      color: darkgray;
+      font-size: 14px;
+    }
+
+    .waypoint-value {
+      font-weight: 600;
+      font-size: 20px;
+    }
+  }
+}
+
+mat-accordion {
+  width: 100%;
 }
 
 svg.material-icons {

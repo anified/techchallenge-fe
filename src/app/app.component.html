@@ -30,9 +30,8 @@
     </a> -->
 </div>
 
-<div class="content" role="main">
-
-  <div fxLayout="column" fxLayoutAlign="space-between start">
+<div class="content" role="main" fxLayout="row">
+  <div fxLayout="column" fxFlex="30" fxLayoutAlign="start start">
     <mat-form-field appearance="outline">
       <mat-label>Select Airport</mat-label>
       <mat-select [(ngModel)]="selectedAirport" (ngModelChange)="selectAirportChange()">
@@ -40,46 +39,102 @@
       </mat-select>
     </mat-form-field>
     <ng-container *ngIf="selectedAirport">
-      <h1>Selected Airport</h1>
-      <p>Name: {{ selectedAirport?.name }}</p>
-      <p>ICAO: {{ selectedAirport?.icao }}</p>
-      <p>Latitude: {{ selectedAirport?.lat }}</p>
-      <p>Longitude: {{ selectedAirport?.lng }}</p>
-      <p>Altitude: {{ selectedAirport?.alt }}</p>
-    </ng-container>
-    <ng-container *ngIf="selectedAirport && !selectedAirportSIDTopWaypoints && !selectedAirportSTARTopWaypoints">
-      <div>
-        <h2>Please wait...</h2>
+      <div class="airport-detail">
+        <p class="airport-label">Name</p>
+        <p class="airport-value">{{ selectedAirport?.name }}</p>
+      </div>
+      <div class="airport-detail">
+        <p class="airport-label">ICAO</p>
+        <p class="airport-value">{{ selectedAirport?.icao }}</p>
+      </div>
+      <div class="airport-detail">
+        <p class="airport-label">Latitude</p>
+        <p class="airport-value">{{ selectedAirport?.lat }}</p>
+      </div>
+      <div class="airport-detail">
+        <p class="airport-label">Longitude</p>
+        <p class="airport-value">{{ selectedAirport?.lng }}</p>
+      </div>
+      <div class="airport-detail">
+        <p class="airport-label">Altitude</p>
+        <p class="airport-value">{{ selectedAirport?.alt }}</p>
       </div>
     </ng-container>
-    <ng-container *ngIf="selectedAirportSIDTopWaypoints">
-      <div *ngIf="selectedAirportSIDTopWaypoints.topWaypoints && selectedAirportSIDTopWaypoints.topWaypoints.length > 0;
-        then showSIDWaypoints else noSIDWaypoints"></div>
-      <ng-template #showSIDWaypoints>
-        <h1>Top 2 SID Waypoints</h1>
-        <div *ngFor="let waypoint of selectedAirportSIDTopWaypoints.topWaypoints">
-          <p>Name: {{ waypoint.name }}</p>
-          <p>Count: {{ waypoint.count }}</p>
-        </div>
-      </ng-template>
-      <ng-template #noSIDWaypoints>
-        <h1>No SID Waypoints</h1>
-      </ng-template>
-    </ng-container>
-    <ng-container *ngIf="selectedAirportSTARTopWaypoints">
-      <div *ngIf="selectedAirportSTARTopWaypoints.topWaypoints && selectedAirportSTARTopWaypoints.topWaypoints.length > 0;
-        then showSTARWaypoints else noSTARWaypoints"></div>
-      <ng-template #showSTARWaypoints>
-        <h1>Top 2 STAR Waypoints</h1>
-        <div *ngFor="let waypoint of selectedAirportSTARTopWaypoints.topWaypoints">
-          <p>Name: {{ waypoint.name }}</p>
-          <p>Count: {{ waypoint.count }}</p>
-        </div>
-      </ng-template>
-      <ng-template #noSTARWaypoints>
-        <h1>No STAR Waypoints</h1>
-      </ng-template>
-    </ng-container>
+  </div>
+  <div fxLayout="column" fxFlex="70" fxLayoutAlign="stretch start">
+    <mat-accordion multi>
+      <mat-expansion-panel [expanded]="sidPanelOpenState" (opened)="sidPanelOpenState = true" (closed)="sidPanelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Top SID Count Waypoints
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div *ngIf="selectedAirport; then sidContainer else noSelectedAirport"></div>
+        <ng-template #sidContainer>
+          <div *ngIf="selectedAirportSIDTopWaypoints; then showSIDContainer else waitSIDContainer"></div>
+          <ng-template #showSIDContainer>
+            <div *ngIf="selectedAirportSIDTopWaypoints?.topWaypoints?.length > 0;
+              then showSIDWaypoints else noSIDWaypoints"></div>
+            <ng-template #showSIDWaypoints>
+              <div fxLayout="row" fxLayoutAlign="space-around center">
+                <div class="waypoint-details" *ngFor="let waypoint of selectedAirportSIDTopWaypoints.topWaypoints">
+                  <p class="waypoint-value">{{ waypoint.count }}</p>
+                  <p class="waypoint-label">{{ waypoint.name }}</p>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #noSIDWaypoints>
+              <div class="waypoint-details" fxLayout="row" fxLayoutAlign="center center">
+                <p>No SID Waypoints</p>
+              </div>
+            </ng-template>
+          </ng-template>
+          <ng-template #waitSIDContainer>
+            <div class="waypoint-details" fxLayout="row" fxLayoutAlign="center center">
+              <p>Please wait...</p>
+            </div>
+          </ng-template>
+        </ng-template>
+      </mat-expansion-panel>
+      <mat-expansion-panel [expanded]="starPanelOpenState" (opened)="starPanelOpenState = true" (closed)="starPanelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Top STAR Count Waypoints
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div *ngIf="selectedAirport; then starContainer else noSelectedAirport"></div>
+        <ng-template #starContainer>
+          <div *ngIf="selectedAirportSTARTopWaypoints; then showSTARContainer else waitSTARContainer"></div>
+          <ng-template #showSTARContainer>
+            <div *ngIf="selectedAirportSTARTopWaypoints?.topWaypoints?.length > 0;
+              then showSTARWaypoints else noSTARWaypoints"></div>
+            <ng-template #showSTARWaypoints>
+              <div fxLayout="row" fxLayoutAlign="space-around center">
+                <div class="waypoint-details" *ngFor="let waypoint of selectedAirportSTARTopWaypoints.topWaypoints">
+                  <p class="waypoint-value">{{ waypoint.count }}</p>
+                  <p class="waypoint-label">{{ waypoint.name }}</p>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #noSTARWaypoints>
+              <div class="waypoint-details" fxLayout="row" fxLayoutAlign="center center">
+                <p>No STAR Waypoints</p>
+              </div>
+            </ng-template>
+          </ng-template>
+          <ng-template #waitSTARContainer>
+            <div class="waypoint-details" fxLayout="row" fxLayoutAlign="center center">
+              <p>Please wait...</p>
+            </div>
+          </ng-template>
+        </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <ng-template #noSelectedAirport>
+      <div class="waypoint-details" fxLayout="row" fxLayoutAlign="center center">
+        <p>Please select an airport</p>
+      </div>
+    </ng-template>
   </div>
 
   <!-- Highlight Card -->
